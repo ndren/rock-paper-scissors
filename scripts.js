@@ -25,24 +25,41 @@ function playRound(playerSelection, computerSelection) {
 			return (computerSelection === 'Rock' ? 'Computer wins!' : 'Player wins!')
 	}
 }
-function game() {
-	let drawCount = 0, winCount = 0, lossCount = 0;
-	for (i = 0; i < 5; i++) {
-		message = playRound(prompt('Pick Rock, Paper or Scissors', 'Rock'), computerPlay())
-		switch (message) {
-			case 'Player wins!':
-				winCount++;
-				break;
-			case 'Computer wins!':
-				lossCount++;
-				break;
-			case 'Draw!':
-				drawCount++;
-				break;
-
-
-		}
-	}
-	return { 'Wins: ': winCount, 'Losses: ': lossCount, 'Draws: ': drawCount };
+function reset() {
+	draws = 0;
+	wins = 0;
+	losses = 0;
 }
-console.log(game());
+let buttons = document.querySelectorAll('button')
+let draws = 0; let wins = 0; let losses = 0;
+buttons.forEach((button) => button.addEventListener('click', function () {
+	let result = playRound(button.innerText, computerPlay());
+	let div = document.querySelector('#result');
+
+	switch (result) {
+		case 'Draw!':
+			draws += 1;
+			break;
+		case 'Player wins!':
+			wins += 1;
+			break;
+		case 'Computer wins!':
+			losses += 1;
+			break;
+	}
+
+	div.innerText = result + '\n' + `Draws: ${draws}; Wins: ${wins}; Losses: ${losses}.`;
+	if (wins === 5) {
+		reset();
+		div.innerText += '\n' + 'Player wins this set!';
+	}
+	if (losses === 5) {
+		reset();
+		div.innerText += '\n' + 'Computer wins this set!';
+	}
+	if (draws === 5) {
+		reset();
+		div.innerText += '\n' + 'This set is drawn!';
+	}
+
+}))
